@@ -5,7 +5,7 @@ const { clientConfig } = require("../../config");
 const makeRemoteExecutor = require("./makeRemoteExecutor");
 
 module.exports = {
-  getSchema: async () => {
+  getContentfulSchema: async () => {
     const [space, token, previewToken, ...rest] = clientConfig;
     const contentfulUrl = `${contentfulEndpoint}/spaces/${space}/environments/${contentfulEnv}`;
     const contentfulToken = `Bearer ${token}`;

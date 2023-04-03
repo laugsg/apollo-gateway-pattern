@@ -9,31 +9,20 @@ const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const gql = require("graphql-tag");
 
-// custom tools
-const { getSchema } = require("./utils/contenful/getSchema");
-
+// datasources
+const { getContentfulSchema } = require("./utils/contenful/getContentfulSchema");
+const { getAppSyncSchema } = require("./utils/appsync/getAppSyncSchema");
 
 (async () => {
-  const { schema } = await getSchema();
+  const { schema } = await getContentfulSchema();
   const contentfulSchema = { schema: schema };
 
-  let userSchema = makeExecutableSchema({
-    typeDefs: `
-  type ALSOUser {
-    id: ID!
-    email: String
-  }
-  type Query {
-    userById(id: ID!): ALSOUser
-  }
-  `,
-    resolvers: {},
-  });
-  const userSubschema = { schema: userSchema };
+  let appSyncSchema = getAppSyncSchema()
+  const appSyncSubschema = { schema: appSyncSchema };
 
   // build the combined schema
   const gatewaySchema = stitchSchemas({
-    subschemas: [contentfulSchema, userSubschema],
+    subschemas: [contentfulSchema, appSyncSubschema],
   });
 
   await initApollo(gatewaySchema);
