@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 // GraphQL tools
-const { makeExecutableSchema } = require("@graphql-tools/schema");
 const { stitchSchemas } = require("@graphql-tools/stitch");
 
 // Apollo tools
@@ -14,8 +13,11 @@ const { getContentfulSchema } = require("./utils/contenful/getContentfulSchema")
 const { getAppSyncSchema } = require("./utils/appsync/getAppSyncSchema");
 
 (async () => {
+  /** Contentful pattern */
   const { schema } = await getContentfulSchema();
   const contentfulSchema = { schema: schema };
+
+  // console.log("contentfulSchema", contentfulSchema)
 
   let appSyncSchema = getAppSyncSchema()
   const appSyncSubschema = { schema: appSyncSchema };
